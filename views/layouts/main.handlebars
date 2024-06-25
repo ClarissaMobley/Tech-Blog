@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+     <header class="bg-dark text-white">
+        <nav class="navbar navbar-dark bg-dark">
+            <ul class="navbar-nav d-flex flex-row">
+                <li class="nav-item">
+                    <a class="nav-link h4 mr-5" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link h4 mr-5" href="/dashboard">Dashboard</a>
+                </li>
+                {{#unless loggedIn}}
+                    <li class="nav-item">
+                        <a class="nav-link h4 mr-5" href="/login">Login</a>
+                    </li>
+                {{/unless}}
+                <li class="nav-item">
+                    <a class="nav-link h4 mr-5" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </nav>
+        <h1 class="text-left ml-3 pb-4">Tech Blog</h1>
+    </header>
    
    {{{body}}} 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
