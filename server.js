@@ -11,10 +11,9 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Set up Handlebars engine with custon helpers
 const hbs = exphbs.create({ helpers });
 
- const sess = {
+const sess = {
     secret: process.env.SECRET,
     cookie: {
         maxAge: 300000,
@@ -31,7 +30,6 @@ const hbs = exphbs.create({ helpers });
 
 app.use(session(sess));
 
-// Inform Express.js on which template engine to use
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 

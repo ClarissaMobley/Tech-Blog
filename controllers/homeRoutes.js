@@ -23,13 +23,14 @@ router.get('/', async (req, res) => {
       logged_in: req.session.logged_in,
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json(err);
   }
 });
 
 router.get('/post/:id', async (req, res) => {
   try {
-    const postData = await Post.findByPK(req.params.id, {
+    const postData = await Post.findByPk(req.params.id, {
       include: [
         {
           model: User,
@@ -38,31 +39,43 @@ router.get('/post/:id', async (req, res) => {
       ],
     });
 
+    if (!postData) {
+      res.status(404).json({ message: 'No post found with this id' });
+      return;
+    }
+
     const post = postData.get({ plain: true });
 
-    res.render('singlePost', {
+    res.render('posts', {
       ...post,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json(err);
   }
 });
 
 router.get('/dashboard', withAuth, async (req, res) => {
   try {
-    const userData = await User.findByPK(req.session.user_id, {
+    const userData = await User.findByPk(req.session.user_id, {
       attributes: { exclude: ['password'] },
       include: [{ model: Post }],
     });
 
+    if (!userData) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
     const user = userData.get({ plain: true });
 
-    res.render('/dashboard', {
+    res.render('dashboard', {
       ...user,
       logged_in: true,
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json(err);
   }
 });
@@ -75,5 +88,5 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
-
 module.exports = router;
+
