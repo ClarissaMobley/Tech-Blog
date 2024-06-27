@@ -37,7 +37,7 @@ Post.init(
     freezeTableName: true,
     underscored: true,
     modelName: 'post',
-  },
+  }
 );
 
 module.exports = Post;

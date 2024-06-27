@@ -1,6 +1,30 @@
 const router = require('express').Router();
 const { Post, User } = require('../../models');
 const withAuth = require('../../utils/auth');
+const { formatDate } = require('../../utils/helpers');
+
+// Get all posts
+router.get('/', withAuth, async (req, res) => {
+  try {
+    const postData = await Post.findAll({
+      include: [{ model: User, attributes: ['username'] }],
+    });
+
+    const posts = postData.map((post) => {
+      const postPlain = post.get({ plain: true });
+      postPlain.formattedDate = formatDate(postPlain.created_on);
+      return postPlain;
+    });
+
+    res.render('homepage', {
+      posts,
+      logged_in: req.session.logged_in,
+    });
+  } catch (err) {
+    console.error('Error fetching posts:', err);
+    res.status(500).json(err);
+  }
+});
 
 // Post Routes
 router.post('/', withAuth, async (req, res) => {
@@ -59,4 +83,3 @@ router.delete('/:id', withAuth, async (req, res) => {
 });
 
 module.exports = router;
-

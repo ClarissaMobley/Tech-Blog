@@ -1,6 +1,18 @@
-{{#each Posts}}
-  <div class="post">
-    <h2>{{title}}</h2>
-    <p>{{body}}</p>
+<div class="container mt-5">
+    <div class="row">
+      {{#each posts}}
+        <div class="col-md-12">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">{{this.title}}</h5>
+                <h6 class="card-subtitle mb-0 text-muted">Posted by {{this.user.name}} on {{this.formattedDate}}</h6>
+              </div>
+              <hr>
+              <p class="card-text">{{this.post_content}}</p>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
   </div>
-{{/each}}

@@ -1,23 +1,21 @@
 const router = require('express').Router();
-const { Post, User, Comment } = require('../models');
+const { Post, User } = require('../models');
 const withAuth = require('../utils/auth.js');
+const { formatDate } = require('../utils/helpers.js');
 
+// Home page route
 router.get('/', async (req, res) => {
   try {
-    // Get all posts and JOIN with user data
     const postData = await Post.findAll({
-      include: [
-        {
-          model: User,
-          attributes: ['name'],
-        },
-      ],
+      include: [{ model: User, attributes: ['name'] }],
     });
 
-    // Serialize data so the template can read it
-    const posts = postData.map((post) => post.get({ plain: true }));
+    const posts = postData.map((post) => {
+      const postPlain = post.get({ plain: true });
+      postPlain.formattedDate = formatDate(postPlain.created_on);
+      return postPlain;
+    });
 
-    // Pass serialized data and session flag into template
     res.render('homepage', {
       posts,
       logged_in: req.session.logged_in,
@@ -29,15 +27,11 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Single post route
 router.get('/post/:id', async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id, {
-      include: [
-        {
-          model: User,
-          attributes: ['name'],
-        },
-      ],
+      include: [{ model: User, attributes: ['name'] }],
     });
 
     if (!postData) {
@@ -46,6 +40,7 @@ router.get('/post/:id', async (req, res) => {
     }
 
     const post = postData.get({ plain: true });
+    post.formattedDate = formatDate(post.created_on);
 
     res.render('posts', {
       ...post,
@@ -58,11 +53,15 @@ router.get('/post/:id', async (req, res) => {
   }
 });
 
+// Dashboard route
 router.get('/dashboard', withAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.session.user_id, {
       attributes: { exclude: ['password'] },
-      include: [{ model: Post }],
+      include: [{
+        model: Post,
+        where: { user_id: req.session.user_id }, // Fetch only posts created by the logged-in user
+      }],
     });
 
     if (!userData) {
@@ -71,6 +70,10 @@ router.get('/dashboard', withAuth, async (req, res) => {
     }
 
     const user = userData.get({ plain: true });
+    user.posts = user.posts.map(post => {
+      post.formattedDate = formatDate(post.created_on);
+      return post;
+    });
 
     res.render('dashboard', {
       ...user,
@@ -83,19 +86,26 @@ router.get('/dashboard', withAuth, async (req, res) => {
   }
 });
 
+// Login route
 router.get('/login', (req, res) => {
   if (req.session.logged_in) {
     res.redirect('/dashboard');
     return;
   }
-  res.render('login', {
-    pageTitle: 'Login',
-  });
+
+  res.render('login', { pageTitle: 'Login' });
 });
 
+// Signup route
 router.get('/signup', (req, res) => {
-  res.render('signup', {
-    pageTitle: 'Sign Up',
+  res.render('signup', { pageTitle: 'Sign Up' });
+});
+
+// New post route
+router.get('/newPost', withAuth, (req, res) => {
+  res.render('newpost', {
+    pageTitle: 'New Post',
+    logged_in: req.session.logged_in,
   });
 });
 
