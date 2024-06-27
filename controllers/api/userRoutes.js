@@ -4,10 +4,17 @@ const { User } = require('../../models');
 // User Signup
 router.post('/signup', async (req, res) => {
     try {
+        const { name, email, password } = req.body;
+
+        if (password.length < 8) {
+            res.status(400).json({ message: 'Password must be at least 8 characters long' });
+            return;
+        }
+
         const userData = await User.create({
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password,
+            name: name,
+            email: email,
+            password: password,
         });
 
         req.session.save(() => {
