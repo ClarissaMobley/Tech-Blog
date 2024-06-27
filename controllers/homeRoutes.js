@@ -61,8 +61,8 @@ router.get('/dashboard', withAuth, async (req, res) => {
       include: [
         {
           model: Post,
-          where: { user_id: req.session.user_id }, // Fetch only posts created by the logged-in user
-          required: false, // Allow users with no posts to view the dashboard
+          where: { user_id: req.session.user_id }, 
+          required: false, 
         },
       ],
     });
