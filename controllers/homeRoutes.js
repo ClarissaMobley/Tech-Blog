@@ -105,7 +105,7 @@ router.get('/signup', (req, res) => {
 });
 
 // New post route
-router.get('/newPost', withAuth, (req, res) => {
+router.get('/newpost', withAuth, (req, res) => {
   res.render('newpost', {
     pageTitle: 'New Post',
     logged_in: req.session.logged_in,
