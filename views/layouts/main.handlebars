@@ -20,17 +20,18 @@
           <li class='nav-item'>
             <a class='nav-link h5 mr-5' href='/dashboard'>Dashboard</a>
           </li>
-          {{#unless loggedIn}}
+          {{#unless logged_in}}
             <li class='nav-item'>
               <a class='nav-link h5 mr-5' href='/login'>Login</a>
             </li>
+          {{else}}
+            <li class='nav-item'>
+              <a class='nav-link h5 mr-5' id="logout" href='#'>Logout</a>
+            </li>
           {{/unless}}
-          <li class='nav-item'>
-            <a class='nav-link h5 mr-5' href='/logout'>Logout</a>
-          </li>
         </ul>
       </nav>
-      <h1 class='text-left ml-3 pb-4'>Tech Blog</h1>
+      <h1 class='text-left ml-3 pb-4'>{{pageTitle}}</h1>
     </header>
 
     {{{body}}}

@@ -21,6 +21,7 @@ router.get('/', async (req, res) => {
     res.render('homepage', {
       posts,
       logged_in: req.session.logged_in,
+      pageTitle: 'Tech Blog',
     });
   } catch (err) {
     console.error(err);
@@ -49,6 +50,7 @@ router.get('/post/:id', async (req, res) => {
     res.render('posts', {
       ...post,
       logged_in: req.session.logged_in,
+      pageTitle: 'Post Details',
     });
   } catch (err) {
     console.error(err);
@@ -73,6 +75,7 @@ router.get('/dashboard', withAuth, async (req, res) => {
     res.render('dashboard', {
       ...user,
       logged_in: true,
+      pageTitle: 'Your Dashboard',
     });
   } catch (err) {
     console.error(err);
@@ -85,11 +88,15 @@ router.get('/login', (req, res) => {
     res.redirect('/dashboard');
     return;
   }
-  res.render('login');
+  res.render('login', {
+    pageTitle: 'Login',
+  });
 });
 
 router.get('/signup', (req, res) => {
-    res.render('signup');
-})
+  res.render('signup', {
+    pageTitle: 'Sign Up',
+  });
+});
 
 module.exports = router;
