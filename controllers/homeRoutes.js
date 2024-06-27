@@ -113,7 +113,7 @@ router.get('/newpost', withAuth, (req, res) => {
 });
 
 // Edit Post Route
-router.get('/editPost/:id', withAuth, async (req, res) => {
+router.get('/editpost/:id', withAuth, async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id, {
       include: [{ model: User, attributes: ['name'] }],
@@ -141,7 +141,7 @@ router.get('/editPost/:id', withAuth, async (req, res) => {
 
 
 // Comment Post Route
-router.get('/commentPost/:id', withAuth, async (req, res) => {
+router.get('/commentpost/:id', withAuth, async (req, res) => {
     try {
       const postData = await Post.findByPk(req.params.id, {
         include: [
