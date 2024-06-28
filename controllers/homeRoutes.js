@@ -108,7 +108,7 @@ router.get('/signup', (req, res) => {
 router.get('/newpost', withAuth, (req, res) => {
     res.render('newpost', {
         pageTitle: 'New Post',
-        logged_in: req.session.logged_in,
+        logged_in: true,
     });
 });
 
