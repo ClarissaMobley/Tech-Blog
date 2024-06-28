@@ -106,12 +106,21 @@ router.get('/signup', (req, res) => {
 
 // New post route
 router.get('/newpost', withAuth, (req, res) => {
+  console.log('Accessing /newpost route');
+  console.log('Session:', req.session);
+
+  try {
     res.render('newpost', {
+      layout: 'main', // Specify layout if needed
       pageTitle: 'New Post',
-      user: req.session.user, 
+      user: req.session.user,
       logged_in: req.session.logged_in,
     });
-  });
+  } catch (err) {
+    console.error('Error rendering newpost view:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 // Edit Post Route
 router.get('/editpost/:id', withAuth, async (req, res) => {
