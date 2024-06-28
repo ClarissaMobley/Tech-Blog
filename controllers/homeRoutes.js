@@ -61,8 +61,8 @@ router.get('/dashboard', withAuth, async (req, res) => {
       include: [
         {
           model: Post,
-          where: { user_id: req.session.user_id }, 
-          required: false, 
+          where: { user_id: req.session.user_id },
+          required: false,
         },
       ],
     });
@@ -139,38 +139,37 @@ router.get('/editpost/:id', withAuth, async (req, res) => {
   }
 });
 
-
 // Comment Post Route
 router.get('/commentpost/:id', withAuth, async (req, res) => {
-    try {
-      const postData = await Post.findByPk(req.params.id, {
-        include: [
-          { model: User, attributes: ['name'] },
-          { model: Comment, include: [{ model: User, attributes: ['name'] }] },
-        ],
-      });
-  
-      if (!postData) {
-        res.status(404).json({ message: 'No post found with this id' });
-        return;
-      }
-  
-      const post = postData.get({ plain: true });
-      post.formattedDate = formatDate(post.created_on);
-      post.comments = post.comments.map(comment => {
-        comment.formattedDate = formatDate(comment.created_on);
-        return comment;
-      });
-  
-      res.render('commentpost', {
-        ...post,
-        logged_in: req.session.logged_in,
-        pageTitle: 'Comment',
-      });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json(err);
+  try {
+    const postData = await Post.findByPk(req.params.id, {
+      include: [
+        { model: User, attributes: ['name'] },
+        { model: Comment, include: [{ model: User, attributes: ['name'] }] },
+      ],
+    });
+
+    if (!postData) {
+      res.status(404).json({ message: 'No post found with this id' });
+      return;
     }
-  });
+
+    const post = postData.get({ plain: true });
+    post.formattedDate = formatDate(post.created_on);
+    post.comments = post.comments.map((comment) => {
+      comment.formattedDate = formatDate(comment.created_on);
+      return comment;
+    });
+
+    res.render('commentpost', {
+      ...post,
+      logged_in: req.session.logged_in,
+      pageTitle: 'Comment',
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
 
 module.exports = router;
