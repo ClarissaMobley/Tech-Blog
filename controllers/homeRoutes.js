@@ -113,7 +113,7 @@ router.get('/new-post', withAuth, (req, res) => {
 });
 
 // Edit Post Route
-router.get('/editpost/:id', withAuth, async (req, res) => {
+router.get('/edit-post/:id', withAuth, async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id, {
       include: [{ model: User, attributes: ['name'] }],
@@ -127,7 +127,7 @@ router.get('/editpost/:id', withAuth, async (req, res) => {
     const post = postData.get({ plain: true });
     post.formattedDate = formatDate(post.created_on);
 
-    res.render('editpost', {
+    res.render('edit-post', {
       ...post,
       id: req.params.id,
       logged_in: req.session.logged_in,
