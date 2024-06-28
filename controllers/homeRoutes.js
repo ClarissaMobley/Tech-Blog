@@ -140,7 +140,7 @@ router.get('/edit-post/:id', withAuth, async (req, res) => {
 });
 
 // Comment Post Route
-router.get('/commentpost/:id', withAuth, async (req, res) => {
+router.get('/comment-post/:id', withAuth, async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id, {
       include: [
@@ -161,7 +161,7 @@ router.get('/commentpost/:id', withAuth, async (req, res) => {
       return comment;
     });
 
-    res.render('commentpost', {
+    res.render('comment-post', {
       ...post,
       logged_in: req.session.logged_in,
       pageTitle: 'Comment',
