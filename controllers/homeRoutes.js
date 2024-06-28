@@ -107,10 +107,11 @@ router.get('/signup', (req, res) => {
 // New post route
 router.get('/newpost', withAuth, (req, res) => {
     res.render('newpost', {
-        pageTitle: 'New Post',
-        logged_in: true,
+      pageTitle: 'New Post',
+      user: req.session.user, 
+      logged_in: req.session.logged_in,
     });
-});
+  });
 
 // Edit Post Route
 router.get('/editpost/:id', withAuth, async (req, res) => {
